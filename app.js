@@ -6,7 +6,8 @@ const navItems = [
   { id: 'attendance', label: 'Attendance', icon: '✓' },
   { id: 'fees', label: 'Fees', icon: '₹' },
   { id: 'notifications', label: 'Notifications', icon: '🔔' },
-  { id: 'reports', label: 'Reports', icon: '📊' },
+  { id: 'schedule', label: 'Schedule', icon: '🗓️' },
+  { id: 'team', label: 'Team', icon: '🏆' },
 ];
 
 const baseState = {
@@ -16,6 +17,7 @@ const baseState = {
     { id: 2, name: 'Diya Nair', program: 'Functional Fitness', batch: '6:00 AM Core', status: 'Active', fee: '₹6,200', lastPaid: '2026-09-25' },
     { id: 3, name: 'Kabir Rao', program: 'Brazilian Jiu-Jitsu', batch: 'Weekday Combat', status: 'Pending', fee: '₹8,000', lastPaid: '2026-08-18' },
     { id: 4, name: 'Meera Patel', program: 'Boxing', batch: 'Saturday Sparring', status: 'Active', fee: '₹5,500', lastPaid: '2026-10-02' },
+    { id: 5, name: 'Rohan Iyer', program: 'Taekwondo', batch: 'Junior Fighters', status: 'Active', fee: '₹4,500', lastPaid: '2026-09-28' },
   ],
   attendance: [
     { id: 1, name: 'Aarav Sharma', batch: 'Evening Elite', status: 'present' },
@@ -31,27 +33,21 @@ const baseState = {
     { id: 4, name: 'Meera Patel', amount: 5500, month: 'October 2026', status: 'Paid', method: 'Cash' },
   ],
   notifications: [
-    {
-      id: 1,
-      title: 'Elite team seminar',
-      tag: 'Event',
-      body: 'Saturday tactical workshop is scheduled at 9:00 AM. Bring your gloves and hydration kit.',
-      time: '2 hours ago',
-    },
-    {
-      id: 2,
-      title: 'Fee reminder',
-      tag: 'Payment',
-      body: 'Kabir Rao has an outstanding payment for October. Kindly clear dues before the next class.',
-      time: 'Today',
-    },
-    {
-      id: 3,
-      title: 'New youth batch',
-      tag: 'Update',
-      body: 'A new junior self-defense batch has been added for ages 9–12 every Tuesday evening.',
-      time: 'Yesterday',
-    },
+    { id: 1, title: 'Elite team seminar', tag: 'Event', body: 'Saturday tactical workshop scheduled at 9:00 AM. Bring gloves and hydration kit.', time: '2 hours ago' },
+    { id: 2, title: 'Fee reminder', tag: 'Payment', body: 'Kabir Rao has an outstanding payment for October. Kindly clear dues before the next class.', time: 'Today' },
+    { id: 3, title: 'New youth batch', tag: 'Update', body: 'A new junior self-defense batch has been added for ages 9–12 every Tuesday evening.', time: 'Yesterday' },
+  ],
+  schedule: [
+    { id: 1, title: 'Muay Thai Fundamentals', time: '06:00 AM', coach: 'Coach Aiden', room: 'Arena 1', intensity: 'High' },
+    { id: 2, title: 'Strength Conditioning', time: '08:30 AM', coach: 'Coach Sia', room: 'Gym Floor', intensity: 'Medium' },
+    { id: 3, title: 'BJJ Combat Lab', time: '06:30 PM', coach: 'Coach Arjun', room: 'Combat Studio', intensity: 'High' },
+    { id: 4, title: 'Kids Taekwondo', time: '05:00 PM', coach: 'Coach Riya', room: 'Blue Hall', intensity: 'Low' },
+  ],
+  team: [
+    { name: 'Coach Aiden', role: 'Head Muay Thai', focus: 'Elite striking', rating: '4.9' },
+    { name: 'Coach Sia', role: 'Strength Coach', focus: 'Performance fitness', rating: '4.8' },
+    { name: 'Coach Arjun', role: 'BJJ Specialist', focus: 'Combat systems', rating: '4.9' },
+    { name: 'Coach Riya', role: 'Youth Mentor', focus: 'Discipline & mobility', rating: '4.7' },
   ],
   reportCards: [
     { label: 'Members', value: 248, delta: '+8.2%', direction: 'up' },
@@ -179,7 +175,7 @@ function renderOverview() {
 
   const actionBlocks = `
     <section class="card-grid">
-      <article class="panel">
+      <article class="panel premium-panel">
         <div class="panel-header">
           <h3>Coach focus</h3>
           <span class="stat-mini">Today</span>
@@ -192,7 +188,7 @@ function renderOverview() {
         </div>
       </article>
 
-      <article class="panel">
+      <article class="panel premium-panel">
         <div class="panel-header">
           <h3>Facility status</h3>
           <span class="stat-mini">Operational</span>
@@ -206,7 +202,25 @@ function renderOverview() {
     </section>
   `;
 
-  pageContent.innerHTML = `${stats}${chart}${actionBlocks}`;
+  const premiumGrid = `
+    <section class="premium-grid">
+      <article class="luxury-card">
+        <div class="luxury-label">Premium client club</div>
+        <h3>Silver, Gold & Black Belt memberships</h3>
+        <p>Offer VIP perks, private training, diet guidance and priority event booking.</p>
+        <button class="primary-btn" type="button">Manage plans</button>
+      </article>
+
+      <article class="luxury-card highlight">
+        <div class="luxury-label">Next up</div>
+        <h3>Championship prep camp</h3>
+        <p>14 elite athletes selected for the national conditioning camp this weekend.</p>
+        <button class="secondary-btn" type="button">View schedule</button>
+      </article>
+    </section>
+  `;
+
+  pageContent.innerHTML = `${stats}${chart}${actionBlocks}${premiumGrid}`;
 }
 
 function renderClients() {
@@ -279,7 +293,7 @@ function renderClients() {
             </div>
             <div class="field full">
               <label for="clientNotes">Notes</label>
-              <textarea id="clientNotes" name="notes" rows="3" placeholder="Goal, injury notes, or assesssment remarks"></textarea>
+              <textarea id="clientNotes" name="notes" rows="3" placeholder="Goal, injury notes, or assessment remarks"></textarea>
             </div>
           </div>
           <div class="inline-actions">
@@ -333,12 +347,25 @@ function renderAttendance() {
     )
     .join('');
 
+  const presentCount = state.attendance.filter((item) => item.status === 'present').length;
+  const absentCount = state.attendance.length - presentCount;
+
   pageContent.innerHTML = `
     <section class="list-grid">
       <article class="panel">
         <div class="panel-header">
           <h3>Daily attendance register</h3>
           <span class="stat-mini">2026-10-02</span>
+        </div>
+        <div class="attendance-summary-row">
+          <div class="summary-tile">
+            <span>Present</span>
+            <strong>${presentCount}</strong>
+          </div>
+          <div class="summary-tile warning">
+            <span>Absent</span>
+            <strong>${absentCount}</strong>
+          </div>
         </div>
         <div class="attendance-list">${rows}</div>
       </article>
@@ -620,6 +647,132 @@ function renderNotifications() {
   });
 }
 
+function renderSchedule() {
+  pageTitle.textContent = 'Schedule';
+
+  const scheduleRows = state.schedule
+    .map(
+      (session) => `
+        <tr>
+          <td>${session.title}</td>
+          <td>${session.time}</td>
+          <td>${session.coach}</td>
+          <td>${session.room}</td>
+          <td><span class="badge ${session.intensity === 'High' ? 'red' : session.intensity === 'Medium' ? 'gold' : 'green'}">${session.intensity}</span></td>
+        </tr>
+      `
+    )
+    .join('');
+
+  pageContent.innerHTML = `
+    <section class="list-grid">
+      <article class="table-card">
+        <div class="panel-header">
+          <h3>Class schedule</h3>
+          <span class="stat-mini">Weekly setup</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Session</th>
+                <th>Time</th>
+                <th>Coach</th>
+                <th>Room</th>
+                <th>Intensity</th>
+              </tr>
+            </thead>
+            <tbody>${scheduleRows}</tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="form-card">
+        <h3>Add new session</h3>
+        <form id="sessionForm">
+          <div class="form-grid">
+            <div class="field full">
+              <label for="sessionTitle">Session title</label>
+              <input id="sessionTitle" type="text" placeholder="Combat conditioning" required />
+            </div>
+            <div class="field">
+              <label for="sessionTime">Time</label>
+              <input id="sessionTime" type="text" placeholder="06:30 AM" required />
+            </div>
+            <div class="field">
+              <label for="sessionCoach">Coach</label>
+              <input id="sessionCoach" type="text" placeholder="Coach name" required />
+            </div>
+            <div class="field">
+              <label for="sessionRoom">Room</label>
+              <input id="sessionRoom" type="text" placeholder="Arena 2" required />
+            </div>
+            <div class="field">
+              <label for="sessionIntensity">Intensity</label>
+              <select id="sessionIntensity">
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+              </select>
+            </div>
+          </div>
+          <div class="inline-actions">
+            <button class="secondary-btn" type="reset">Reset</button>
+            <button class="primary-btn" type="submit">Save session</button>
+          </div>
+        </form>
+      </article>
+    </section>
+  `;
+
+  document.getElementById('sessionForm').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const title = document.getElementById('sessionTitle').value.trim();
+    const time = document.getElementById('sessionTime').value.trim();
+    const coach = document.getElementById('sessionCoach').value.trim();
+    const room = document.getElementById('sessionRoom').value.trim();
+    const intensity = document.getElementById('sessionIntensity').value;
+
+    if (!title || !time || !coach || !room) return;
+
+    state.schedule.unshift({
+      id: Date.now(),
+      title,
+      time,
+      coach,
+      room,
+      intensity,
+    });
+
+    saveState();
+    render();
+  });
+}
+
+function renderTeam() {
+  pageTitle.textContent = 'Team';
+
+  const cards = state.team
+    .map(
+      (member) => `
+        <article class="team-card">
+          <div class="team-avatar">${member.name.split(' ').map((part) => part[0]).slice(0, 2).join('')}</div>
+          <h3>${member.name}</h3>
+          <div class="team-role">${member.role}</div>
+          <p>${member.focus}</p>
+          <div class="team-rating">★ ${member.rating}</div>
+        </article>
+      `
+    )
+    .join('');
+
+  pageContent.innerHTML = `
+    <section class="team-grid">
+      ${cards}
+    </section>
+  `;
+}
+
 function renderReports() {
   pageTitle.textContent = 'Reports';
 
@@ -672,6 +825,12 @@ function render() {
       break;
     case 'notifications':
       renderNotifications();
+      break;
+    case 'schedule':
+      renderSchedule();
+      break;
+    case 'team':
+      renderTeam();
       break;
     case 'reports':
       renderReports();
