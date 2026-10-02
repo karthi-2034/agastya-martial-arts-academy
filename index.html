@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agastya Martial Arts & Fitness Academy</title>
+    <meta
+      name="description"
+      content="Premium academy management dashboard for Agastya Martial Arts & Fitness Academy."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand-block">
+          <div class="brand-mark">A</div>
+          <div>
+            <p class="eyebrow">Ascend with discipline</p>
+            <h1>Agastya</h1>
+          </div>
+        </div>
+
+        <div class="brand-subtitle">
+          Martial Arts & Fitness Academy
+        </div>
+
+        <nav id="sidebarNav" class="sidebar-nav" aria-label="Main navigation"></nav>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <div>
+            <p class="topbar-label">Coaching dashboard</p>
+            <h2 id="pageTitle">Overview</h2>
+          </div>
+          <div class="topbar-actions">
+            <button class="ghost-btn" type="button">Export</button>
+            <button class="primary-btn" type="button" id="quickAddClientBtn">
+              + New Client
+            </button>
+          </div>
+        </header>
+
+        <section id="pageContent" class="page-content"></section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
